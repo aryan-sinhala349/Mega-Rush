@@ -18,6 +18,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include Directories
 IncludeDir = {}
+IncludeDir["spdlog"] = "MegaRush/vendor/spdlog/include"
 
 project "MegaRush"
 	location "MegaRush"
@@ -42,7 +43,8 @@ project "MegaRush"
 
 	includedirs
 	{
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"%{IncludeDir.spdlog}"
 	}
 
 	links
@@ -91,7 +93,8 @@ project "Sandbox"
 
 	includedirs
 	{
-		"MegaRush/src"
+		"MegaRush/src",
+		"%{IncludeDir.spdlog}"
 	}
 
 	links

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Log.h"
+
 int main(int argc, char** argv);
 
 namespace MegaRush

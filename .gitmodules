@@ -1,0 +1,3 @@
+[submodule "MegaRush\\vendor\\spdlog"]
+	path = MegaRush\\vendor\\spdlog
+	url = https://github.com/gabime/spdlog
