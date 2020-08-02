@@ -2,6 +2,9 @@
 **/bin/
 **/bin-int/
 
+#MegaRush Files
+*.log
+
 #Visual Studio Files
 **.sln
 .vs
