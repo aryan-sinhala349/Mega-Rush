@@ -4,6 +4,7 @@
 #include "MegaRush/Core/Application.h"
 #include "MegaRush/Core/Base.h"
 #include "MegaRush/Core/Log.h"
+#include "MegaRush/Core/Window.h"
 
 //Events
 #include "MegaRush/Events/ApplicationEvent.h"

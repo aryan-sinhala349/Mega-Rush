@@ -2,9 +2,16 @@
 
 namespace MegaRush
 {
-	Application::Application() : m_Running(false)
+	Application* Application::s_Instance = nullptr;
+
+	Application::Application(const char* title) : m_Running(false)
 	{
-		MR_CORE_INFO("Created Application");
+		MR_CORE_ASSERT(!s_Instance, "Application already created!");
+
+		m_Window = Window::Create(WindowProps(m_Width, m_Height, title));
+		m_Window->SetEventCallback(MR_BIND_EVENT_FN(OnEvent));
+
+		s_Instance = this;
 
 		m_Running = true;
 	}
@@ -18,7 +25,7 @@ namespace MegaRush
 	{
 		while (m_Running)
 		{
-			OnEvent(WindowCloseEvent());
+			m_Window->OnUpdate();
 		}
 	}
 
@@ -28,9 +35,15 @@ namespace MegaRush
 		dispatcher.Dispatch<WindowCloseEvent>(MR_BIND_EVENT_FN(OnWindowClose));
 	}
 
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		return false;
+	}
+
 	bool Application::OnWindowClose(WindowCloseEvent& e)
 	{
-		MR_CORE_INFO("WINDOW CLOSE EVENT");
+		m_Running = false;
+		MR_CORE_INFO("Closed window {0}", m_Window->GetTitle());
 		return false;
 	}
 }

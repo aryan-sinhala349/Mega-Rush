@@ -4,7 +4,7 @@
 class SandboxApp : public MegaRush::Application
 {
 public:
-	SandboxApp()
+	SandboxApp() : Application("Sandbox")
 	{
 		
 	}
