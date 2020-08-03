@@ -32,11 +32,13 @@ namespace MegaRush
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowResizeEvent>(MR_BIND_EVENT_FN(OnWindowResize));
 		dispatcher.Dispatch<WindowCloseEvent>(MR_BIND_EVENT_FN(OnWindowClose));
 	}
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		MR_CORE_WARN("Resized window: {0} x {1}", e.GetWidth(), e.GetHeight());
 		return false;
 	}
 

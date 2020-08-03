@@ -85,6 +85,14 @@ namespace MegaRush
 				thisWindow->m_Data.EventCallback(WindowCloseEvent());
 				DestroyWindow(hwnd);
 				return 0;
+
+			case WM_SIZING:
+				RECT clientRect;
+				GetClientRect(hwnd, &clientRect);
+				thisWindow->m_Data.Width = clientRect.right;
+				thisWindow->m_Data.Height = clientRect.bottom;
+				thisWindow->m_Data.EventCallback(WindowResizeEvent(clientRect.right, clientRect.bottom));
+				return 0;
 		}
 
 		return DefWindowProc(hwnd, uMsg, wParam, lParam);
