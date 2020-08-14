@@ -19,6 +19,12 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include Directories
 IncludeDir = {}
 IncludeDir["spdlog"] = "MegaRush/vendor/spdlog/include"
+IncludeDir["Glad"] = "MegaRush/vendor/Glad/include"
+IncludeDir["glm"] = "MegaRush/vendor/glm"
+
+group "Dependencies"
+	include "MegaRush/vendor/Glad"
+group ""
 
 project "MegaRush"
 	location "MegaRush"
@@ -33,18 +39,22 @@ project "MegaRush"
 	files
 	{
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/glm/glm/**.hpp",
+		"%{prj.name}/vendor/glm/glm/**.inl"
 	}
 
 	defines
 	{
-
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
 	includedirs
 	{
 		"%{prj.name}/src",
-		"%{IncludeDir.spdlog}"
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -94,6 +104,8 @@ project "Sandbox"
 	includedirs
 	{
 		"MegaRush/src",
+		"MegaRush/vendor",
+		"%{IncludeDir.glm}",
 		"%{IncludeDir.spdlog}"
 	}
 
