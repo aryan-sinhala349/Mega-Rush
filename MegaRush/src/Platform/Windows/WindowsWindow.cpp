@@ -41,18 +41,20 @@ namespace MegaRush
 		windowRect.left = windowRect.top = 0;
 		windowRect.right = props.Width;
 		windowRect.bottom = props.Height;
-		AdjustWindowRect(&windowRect, NULL, FALSE);
-		MR_CORE_INFO("{0}", WindowResizeEvent(windowRect.right, windowRect.bottom).ToString());
-
+		AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
+		
 		RegisterClass(&wndClass);
 
 		m_HWND = CreateWindow(className.c_str(), className.c_str(), WS_OVERLAPPEDWINDOW, 
-								CW_USEDEFAULT, CW_USEDEFAULT, windowRect.right, windowRect.bottom,
+								CW_USEDEFAULT, CW_USEDEFAULT, windowRect.right - windowRect.left, windowRect.bottom - windowRect.top,
 								NULL, NULL, hInstance, NULL);
 
 		MR_CORE_ASSERT(m_HWND, "Window handle is null!");
 
 		s_Windows[m_HWND] = this;
+
+		GetClientRect(m_HWND, &windowRect);
+		MR_CORE_INFO("{0}", WindowResizeEvent(windowRect.right, windowRect.bottom));
 
 		ShowWindow(m_HWND, SW_SHOW);
 
