@@ -11,6 +11,9 @@ namespace MegaRush
 		m_Window = Window::Create(WindowProps(m_Width, m_Height, title));
 		m_Window->SetEventCallback(MR_BIND_EVENT_FN(OnEvent));
 
+		m_RendererAPI = RendererAPI::Create();
+		m_RendererAPI->Init();
+
 		s_Instance = this;
 
 		m_Running = true;

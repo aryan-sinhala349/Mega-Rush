@@ -59,7 +59,8 @@ project "MegaRush"
 
 	links
 	{
-	
+		"Glad",
+		"opengl32.lib"
 	}
 
 	filter "system:windows"

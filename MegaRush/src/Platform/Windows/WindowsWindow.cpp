@@ -3,6 +3,10 @@
 #include "MegaRush/Core/Log.h"
 #include "MegaRush/Events/ApplicationEvent.h"
 
+#include "MegaRush/Renderer/RendererAPI.h"
+
+#include <Windows.h>
+
 namespace MegaRush
 {
 	std::unordered_map<HWND, WindowsWindow*> WindowsWindow::s_Windows = std::unordered_map<HWND, WindowsWindow*>();
@@ -33,21 +37,27 @@ namespace MegaRush
 		wndClass.hInstance = hInstance;
 		wndClass.lpszClassName = className.c_str();
 
+		RECT windowRect;
+		windowRect.left = windowRect.top = 0;
+		windowRect.right = props.Width;
+		windowRect.bottom = props.Height;
+		AdjustWindowRect(&windowRect, NULL, FALSE);
+		MR_CORE_INFO("{0}", WindowResizeEvent(windowRect.right, windowRect.bottom).ToString());
+
 		RegisterClass(&wndClass);
 
-		m_HWND = CreateWindowEx(0, className.c_str(), className.c_str(), WS_OVERLAPPEDWINDOW,
-								CW_USEDEFAULT, CW_USEDEFAULT, props.Width, props.Height,
+		m_HWND = CreateWindow(className.c_str(), className.c_str(), WS_OVERLAPPEDWINDOW, 
+								CW_USEDEFAULT, CW_USEDEFAULT, windowRect.right, windowRect.bottom,
 								NULL, NULL, hInstance, NULL);
 
-		if (m_HWND == nullptr)
-		{
-			MR_CORE_ERROR("Window is null!");
-			return;
-		}
+		MR_CORE_ASSERT(m_HWND, "Window handle is null!");
 
 		s_Windows[m_HWND] = this;
 
 		ShowWindow(m_HWND, SW_SHOW);
+
+		m_Context = GraphicsContext::Create(m_HWND);
+		m_Context->Init();
 	}
 
 	void WindowsWindow::Shutdown()
@@ -62,7 +72,7 @@ namespace MegaRush
 		GetMessage(&msg, NULL, 0, 0);
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-		SwapBuffers(GetDC(m_HWND));
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)
@@ -81,6 +91,21 @@ namespace MegaRush
 
 		switch (uMsg)
 		{
+			case WM_DESTROY:
+				switch (RendererAPI::GetAPI())
+				{
+					case RendererAPI::API::None:
+						break;
+
+					case RendererAPI::API::OpenGL:
+						auto context = wglGetCurrentContext();
+						wglMakeCurrent(NULL, NULL);
+						wglDeleteContext(context);
+						ReleaseDC(hwnd, GetDC(hwnd));
+						break;
+				}
+				return 0;
+
 			case WM_CLOSE:
 				thisWindow->m_Data.EventCallback(WindowCloseEvent());
 				DestroyWindow(hwnd);

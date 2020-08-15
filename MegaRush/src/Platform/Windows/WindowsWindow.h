@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MegaRush/Core/Window.h"
+#include "MegaRush/Renderer/GraphicsContext.h"
 
 #include <Windows.h>
 
@@ -35,6 +36,7 @@ namespace MegaRush
 
 		HWND m_HWND;
 		WindowData m_Data;
+		Scope<GraphicsContext> m_Context;
 
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
