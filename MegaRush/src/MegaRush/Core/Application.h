@@ -4,6 +4,7 @@
 #include "Window.h"
 
 #include "MegaRush/Renderer/RendererAPI.h"
+#include "MegaRush/Renderer/Shader.h"
 
 #include "MegaRush/Events/ApplicationEvent.h"
 
@@ -28,6 +29,8 @@ namespace MegaRush
 		uint32_t m_Width = 1280, m_Height = 720;
 		Scope<Window> m_Window;
 		Scope<RendererAPI> m_RendererAPI;
+
+		Ref<Shader> m_Shader;
 
 		void Run();
 
